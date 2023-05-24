@@ -1,5 +1,6 @@
 const express = require('express')
 const dotenv = require('dotenv');
+const bodyparser = require('body-parser')
 // const cors = require("cors")
 const connectDB = require('./config/db');
 const colors = require("colors")
@@ -17,7 +18,7 @@ connectDB();
 
 const app = express()
 app.use(cors());
-
+app.use(bodyparser.json());
 app.use(express.json());
 
 app.get('/' , (req,res) => {

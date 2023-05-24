@@ -6,7 +6,8 @@ import UserListItem from '../UsrAvatar/UserListItem';
 import UserBadgeItem from '../UsrAvatar/UserBadgeItem';
 
 const GroupChatModal = ({children}) => {
-    const {isOpen , onOpen , onClose} = useDisclosure();    const [groupChatName, setGroupChatName] = useState();
+    const {isOpen , onOpen , onClose} = useDisclosure();    
+    const [groupChatName, setGroupChatName] = useState();
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
@@ -60,14 +61,15 @@ const GroupChatModal = ({children}) => {
             Authorization: `Bearer ${user.data.token}`,
           }
         };
-
-        const {data} = axios.post(`/api/chat/group` , {
+        
+        const {data} = await axios.post(`/api/chat/group` , {
           name:groupChatName,
           users: JSON.stringify(selectedUsers.map((u) => u._id))
         },config)
-
-        setChats([data , ...chats]);
-          onclose();
+        
+        setChats([data, ...chats]);
+        
+          onClose();
           toast({
             title: "New Group Chat Created",
             status: "success",
@@ -77,12 +79,14 @@ const GroupChatModal = ({children}) => {
           });
 
       } catch (error) {
+        console.log(error);
         toast({
           title: "Failed to create the chat",
           status: "error",
           duration: 5000,
           isClosable: true,
           position: "bottom",
+          
         });
       }
     }

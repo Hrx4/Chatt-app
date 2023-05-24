@@ -24,8 +24,11 @@ const MyChats = ({fetchAgain}) => {
       };
 
       const { data } = await axios.get("/api/chat", config);
+     
       console.log(data);
+    
       setChats(data);
+      
     } catch (error) {
       toast({
         title: "Error Occured!",
@@ -36,13 +39,17 @@ const MyChats = ({fetchAgain}) => {
         position: "bottom-left",
       });
     }
+    
   };
+  console.log(chats);
 
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-    // eslint-disable-next-line
-  }, [fetchAgain]);
+    
+    console.log(selectedChat);
+
+  }, [fetchAgain , selectedChat]);
 
   return (
     <Box
@@ -88,9 +95,12 @@ const MyChats = ({fetchAgain}) => {
         {chats ?
         (
           <Stack overflowY="scroll">
+            
             {chats.map((chat) => (
+              
               <Box
-              onClick={() => setSelectedChat(chat)}
+              onClick={() => 
+                setSelectedChat(chat)}
               cursor="pointer"
               bg={selectedChat === chat ? "#38B2AC" : "#E8E8E8"}
               color={selectedChat === chat ? "white" : "black"}
@@ -99,9 +109,14 @@ const MyChats = ({fetchAgain}) => {
               borderRadius="lg"
               key={chat._id}>
                 <Text>
-                  {!chat.isGroupChat ? getSender(loggedUser, chat.users) : (chat.chatName)}
+                  {(!chat.isGroupChat) 
+                    ? getSender(loggedUser, chat.users) 
+                    : (chat.chatName)}
                 </Text>
-              </Box>
+                
+                
+              </Box> 
+              
             ))}
           </Stack>
         ):

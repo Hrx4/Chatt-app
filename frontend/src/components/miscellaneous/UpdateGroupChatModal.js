@@ -6,7 +6,7 @@ import { ChatState } from '../../Context/ChatProvider';
 import UserBadgeItem from "../UsrAvatar/UserBadgeItem";
 import UserListItem from '../UsrAvatar/UserListItem';
 
-const UpdateGroupChatModal = ({fetchAgain , setFetchAgain ,fetchMessages}) => {
+const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => {
     const {isOpen , onClose , onOpen} = useDisclosure();
     const [groupChatName, setGroupChatName] = useState("");
     const [search, setSearch] = useState("");
@@ -15,7 +15,13 @@ const UpdateGroupChatModal = ({fetchAgain , setFetchAgain ,fetchMessages}) => {
     const [renameloading, setRenameLoading] = useState(false);
     const toast = useToast();
   
-    const { selectedChat, setSelectedChat, user } = ChatState();
+    const { selectedChat, setSelectedChat, user  } = ChatState();
+
+
+
+
+    
+
 
 
     const handleRename = async () => {
@@ -38,9 +44,16 @@ const UpdateGroupChatModal = ({fetchAgain , setFetchAgain ,fetchMessages}) => {
           );
     
           console.log(data);
-          // setSelectedChat("");
+          console.log(selectedChat); 
+         
           setSelectedChat(data);
+          console.log(selectedChat);
           setFetchAgain(!fetchAgain);
+          
+          // useEffect(() => {
+            
+          // }, [third])
+          
           setRenameLoading(false);
         } catch (error) {
           toast({
@@ -169,19 +182,20 @@ const UpdateGroupChatModal = ({fetchAgain , setFetchAgain ,fetchMessages}) => {
               },
               config
             );
-      
+            
             user1._id === user.data._id ? setSelectedChat() : setSelectedChat(data);
             setFetchAgain(!fetchAgain);
             fetchMessages();
             setLoading(false);
           } catch (error) {
             toast({
-              title: "Error Occured!",
+              title: "Error Ocred!",
               status: "error",
               duration: 5000,
               isClosable: true,
               position: "bottom",
             });
+            console.log(user1);
             setLoading(false);
           }
           setGroupChatName("");
@@ -189,7 +203,7 @@ const UpdateGroupChatModal = ({fetchAgain , setFetchAgain ,fetchMessages}) => {
 
     }
 
-
+console.log(selectedChat);
   
     return (
         <>

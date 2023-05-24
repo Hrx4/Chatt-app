@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react'
 import axios from "axios";
 import { getSender, getSenderFull } from '../config/ChatLogic'
 import { ChatState } from '../Context/ChatProvider'
-import ProfileModal from './miscellaneous/ProfileModal'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from './ScrollableChat';
 import io from "socket.io-client";
+import ProfileModal from './miscellaneous/ProfileModal';
 
 const ENDPOINT = "http://localhost:5000"
 var socket , selectedChatCompare;
@@ -104,10 +104,10 @@ const SingleChat = ({fetchAgain , setFetchAgain}) => {
 
     useEffect(() => {
       fetchMessages();
-  
+
       selectedChatCompare = selectedChat;
-      // eslint-disable-next-line
-    }, [selectedChat]);
+       
+    }, [ selectedChat]);
     useEffect(() => {
       socket.on('message recived' , (newMessageRecived) => {
         if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id){
@@ -172,13 +172,11 @@ const SingleChat = ({fetchAgain , setFetchAgain}) => {
               onClick={() => setSelectedChat("")
                }
             />
-             {!selectedChat.isGroupChat ? (
+             { !selectedChat.isGroupChat ? (
                 <>
                   {getSender(user,selectedChat.users)}
-                  
-                 
 
-                  {/* </ProfileModal> */}
+                  {/* <ProfileModal user={getSenderFull(user , selectedChat.users)}/> */}
                 </>
               ) : (
                 <>
