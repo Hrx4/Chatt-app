@@ -41,7 +41,9 @@ const server=app.listen(PORT , console.log(`Server is running on ${PORT}`.yellow
 const io = require('socket.io')(server , {
     pingTimeOut:60000,
     cors: {
-        origin: "http://localhost:3000",
+        origin: ["http://localhost:3000",
+        "https://chat-app-25vg.onrender.com/"
+    ]
     },
 });
 
