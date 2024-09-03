@@ -10,6 +10,8 @@ const ChatProvider = ({children}) => {
     const [selectedChat, setSelectedChat] = useState("")
     const [chats, setChats] = useState([])
     const [notification, setNotification] = useState([])
+  const [fetchAgain, setFetchAgain] = useState(false)
+
 
     console.log(selectedChat);
     useEffect(() => {
@@ -24,7 +26,7 @@ const ChatProvider = ({children}) => {
 
 
     return(
-    <ChatContext.Provider value={{user , setUser,selectedChat, setSelectedChat,chats, setChats,notification, setNotification}}>
+    <ChatContext.Provider value={{user , setUser,selectedChat, setSelectedChat,chats, setChats,notification, setNotification , fetchAgain , setFetchAgain}}>
         {children}
     </ChatContext.Provider>
     )

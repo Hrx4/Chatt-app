@@ -10,7 +10,7 @@ import axios from 'axios';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../UsrAvatar/UserListItem';
 import { getSender } from '../../config/ChatLogic';
-
+import { backend } from '../../backend';
 const SideDrwaer = () => {
 
   const navigate = useNavigate();
@@ -45,7 +45,7 @@ const SideDrwaer = () => {
         },
       }
 
-      const {data} = await axios.get(`/api/user?search=${search}` , config);
+      const {data} = await axios.get(`${backend}api/user?search=${search}` , config);
       console.log(data);
       setLoading(false);
       setSearchResult(data);
@@ -72,7 +72,7 @@ const SideDrwaer = () => {
           Authorization: `Bearer ${user.data.token}`,
         },
       };
-      const { data } = await axios.post("/api/chat", { userId }, config);
+      const { data } = await axios.post(`${backend}api/chat`, { userId }, config);
       console.log(data);
 
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);

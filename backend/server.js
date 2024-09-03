@@ -7,8 +7,6 @@ const colors = require("colors")
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const messageRoutes = require('./routes/messageRoutes');
-
-
 const cors = require('cors')
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 
@@ -41,11 +39,11 @@ const server=app.listen(PORT , console.log(`Server is running on ${PORT}`.yellow
 const io = require('socket.io')(server , {
     pingTimeOut:60000,
     cors: {
-        origin: ["http://localhost:3000",
-        "https://chat-app-25vg.onrender.com/"
-    ]
+        origin: '*'
     },
 });
+
+// const io = new Server(server)
 
 io.on("connection" , (socket) => {
     console.log("connected socket");
@@ -61,6 +59,7 @@ io.on("connection" , (socket) => {
     });
     socket.on("typing", (room) => socket.in(room).emit("typing"));
     socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
+
 
     socket.on('new message' , (newMessageRecived) => {
         var chat = newMessageRecived.chat;

@@ -2,26 +2,26 @@ import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import axios from "axios";
-import { getSender, getSenderFull } from '../config/ChatLogic'
+import { getSender } from '../config/ChatLogic'
 import { ChatState } from '../Context/ChatProvider'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from './ScrollableChat';
 import io from "socket.io-client";
-import ProfileModal from './miscellaneous/ProfileModal';
+import { backend } from '../backend';
 
-const ENDPOINT = "http://localhost:5000"
+const ENDPOINT = backend
 var socket , selectedChatCompare;
 
-const SingleChat = ({fetchAgain , setFetchAgain}) => {
+const SingleChat = () => {
 
     const [messages, setMessages] = useState([])
     const [loading, setLoading] = useState(false)
     const [newMessage, setNewMessage] = useState("")
     const [socketConnected, setSocketConnected] = useState(false)
-    const {user ,selectedChat, setSelectedChat ,notification ,setNotification} = ChatState()
+    const {user ,selectedChat, setSelectedChat ,notification ,setNotification } = ChatState()
     const [typing, setTyping] = useState(false)
-    const [istyping, setIsTyping] = useState(false)
     const toast = useToast();
+    const{fetchAgain , setFetchAgain} = ChatState()
 
 
     const fetchMessages = async () => {
@@ -37,7 +37,7 @@ const SingleChat = ({fetchAgain , setFetchAgain}) => {
         setLoading(true);
   
         const { data } = await axios.get(
-          `/api/message/${selectedChat._id}`,
+          `${backend}api/message/${selectedChat._id}`,
           config
         );
         setMessages(data);
@@ -68,7 +68,7 @@ const SingleChat = ({fetchAgain , setFetchAgain}) => {
           };
           setNewMessage("");
           const { data } = await axios.post(
-            "/api/message",
+            `${backend}api/message`,
             {
               content: newMessage,
               chatId: selectedChat,
@@ -96,18 +96,15 @@ const SingleChat = ({fetchAgain , setFetchAgain}) => {
       socket = io(ENDPOINT)
       socket.emit("setup" , user)
       socket.on("connected" , () => setSocketConnected(true))
-      socket.on('typing' , setIsTyping(true))
-      socket.on('stop typing' , setIsTyping(false))
 
 
-    }, [])
+    }, [user])
 
     useEffect(() => {
-      fetchMessages();
-
+      fetchMessages()
       selectedChatCompare = selectedChat;
-       
-    }, [ selectedChat]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ selectedChat ]);
     useEffect(() => {
       socket.on('message recived' , (newMessageRecived) => {
         if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecived.chat._id){
@@ -120,8 +117,13 @@ const SingleChat = ({fetchAgain , setFetchAgain}) => {
           setMessages([...messages , newMessageRecived])
         }
       })
+      socket.on("remove user" , (user)=>{
+        console.log('====================================');
+        console.log(user);
+        console.log('====================================');
+      })
+
     })
-    
     
     
     const typingHandler = (e) => {
@@ -183,8 +185,7 @@ const SingleChat = ({fetchAgain , setFetchAgain}) => {
                   {selectedChat.chatName.toUpperCase()}
                   <UpdateGroupChatModal
                     fetchMessages={fetchMessages}
-                    fetchAgain={fetchAgain}
-                    setFetchAgain={setFetchAgain}
+                    
                   />
                 </>
               )}

@@ -2,7 +2,7 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, V
 import React, { useState } from 'react'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { backend } from '../../backend';
 
 
 const SignUp = () => {
@@ -89,7 +89,7 @@ const SignUp = () => {
             "Content-type" : "application/json",
           },
         };
-        const data = await axios.post("/api/user" , {name,email,password,pic}
+        const data = await axios.post(`${backend}api/user` , {name,email,password,pic}
         ,config);
         toast({
           title: "Registration successfull",

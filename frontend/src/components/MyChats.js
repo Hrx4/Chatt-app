@@ -6,11 +6,11 @@ import { getSender } from '../config/ChatLogic';
 import { ChatState } from '../Context/ChatProvider'
 import ChatLoading from './ChatLoading';
 import GroupChatModal from './miscellaneous/GroupChatModal';
-
-const MyChats = ({fetchAgain}) => {
+import { backend } from '../backend';
+const MyChats = () => {
 
   const [loggedUser, setLoggedUser] = useState()
-  const {user ,selectedChat, setSelectedChat,chats, setChats} = ChatState();
+  const {user ,selectedChat, setSelectedChat,chats, setChats , fetchAgain} = ChatState();
 
   const toast = useToast();
 
@@ -23,7 +23,7 @@ const MyChats = ({fetchAgain}) => {
         },
       };
 
-      const { data } = await axios.get("/api/chat", config);
+      const { data } = await axios.get(`${backend}api/chat`, config);
      
       console.log(data);
     
@@ -46,11 +46,11 @@ const MyChats = ({fetchAgain}) => {
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-    
-    console.log(selectedChat);
-
-  }, [fetchAgain , selectedChat]);
-
+    // console.log(selectedChat);
+    console.log(fetchAgain);
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchAgain ]);
+ 
   return (
     <Box
     display={{ base: selectedChat ? "none" : "flex", md: "flex" }}

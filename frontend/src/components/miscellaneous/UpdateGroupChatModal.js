@@ -5,8 +5,9 @@ import React, { useState } from 'react'
 import { ChatState } from '../../Context/ChatProvider';
 import UserBadgeItem from "../UsrAvatar/UserBadgeItem";
 import UserListItem from '../UsrAvatar/UserListItem';
+import { backend } from '../../backend';
 
-const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => {
+const UpdateGroupChatModal = ({fetchMessages  }) => {
     const {isOpen , onClose , onOpen} = useDisclosure();
     const [groupChatName, setGroupChatName] = useState("");
     const [search, setSearch] = useState("");
@@ -15,13 +16,7 @@ const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => 
     const [renameloading, setRenameLoading] = useState(false);
     const toast = useToast();
   
-    const { selectedChat, setSelectedChat, user  } = ChatState();
-
-
-
-
-    
-
+    const { selectedChat, setSelectedChat, user , fetchAgain , setFetchAgain  } = ChatState();
 
 
     const handleRename = async () => {
@@ -35,7 +30,7 @@ const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => 
             },
           };
           const { data } = await axios.put(
-            `/api/chat/rename`,
+            `${backend}api/chat/rename`,
             {
               chatId: selectedChat._id,
               chatName: groupChatName,
@@ -47,6 +42,7 @@ const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => 
           console.log(selectedChat); 
          
           setSelectedChat(data);
+          
           console.log(selectedChat);
           setFetchAgain(!fetchAgain);
           
@@ -80,7 +76,7 @@ const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => 
               Authorization: `Bearer ${user.data.token}`,
             },
           };
-          const { data } = await axios.get(`/api/user?search=${search}`, config);
+          const { data } = await axios.get(`${backend}api/user?search=${search}`, config);
           console.log(data);
           setLoading(false);
           setSearchResult(data);
@@ -129,7 +125,7 @@ const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => 
               },
             };
             const { data } = await axios.put(
-              `/api/chat/groupadd`,
+              `${backend}api/chat/groupadd`,
               {
                 chatId: selectedChat._id,
                 userId: user1._id,
@@ -157,6 +153,7 @@ const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => 
 
     const handleRemove = async (user1) => {
         if (selectedChat.groupAdmin._id !== user.data._id && user1._id !== user.data._id) {
+          
             toast({
               title: "Only admins can remove someone!",
               status: "error",
@@ -175,7 +172,7 @@ const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => 
               },
             };
             const { data } = await axios.put(
-              `/api/chat/groupremove`,
+              `${backend}api/chat/groupremove`,
               {
                 chatId: selectedChat._id,
                 userId: user1._id,
@@ -184,6 +181,10 @@ const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => 
             );
             
             user1._id === user.data._id ? setSelectedChat() : setSelectedChat(data);
+            console.log('====================================');
+            console.log(data);
+            console.log('====================================');
+          
             setFetchAgain(!fetchAgain);
             fetchMessages();
             setLoading(false);
@@ -203,7 +204,6 @@ const UpdateGroupChatModal = ({fetchMessages , fetchAgain , setFetchAgain }) => 
 
     }
 
-console.log(selectedChat);
   
     return (
         <>
@@ -273,7 +273,7 @@ console.log(selectedChat);
               </ModalBody>
     
               <ModalFooter>
-                <Button onClick={() => handleRemove(user)} colorScheme="red">
+                <Button onClick={() => handleRemove(user?.data)} colorScheme="red">
                 Leave Group
                 </Button>   
               </ModalFooter>

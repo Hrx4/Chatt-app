@@ -29,7 +29,6 @@ const registerUser = asyncHandler(async(req , res) => {
             password: user.password,
             pic: user.pic,
             token:generateToken(user._id)
-
         });
     }else{
         res.status(400);
