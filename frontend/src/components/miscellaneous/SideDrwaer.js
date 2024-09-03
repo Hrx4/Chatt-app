@@ -12,7 +12,6 @@ import UserListItem from '../UsrAvatar/UserListItem';
 import { getSender } from '../../config/ChatLogic';
 import { backend } from '../../backend';
 const SideDrwaer = () => {
-
   const navigate = useNavigate();
   const [search , setSearch] = useState("");
   const [searchResult , setSearchResult] = useState([]);
