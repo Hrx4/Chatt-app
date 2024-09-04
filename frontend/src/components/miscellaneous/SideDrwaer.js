@@ -4,14 +4,15 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ChatState } from '../../Context/ChatProvider';
 import ProfileModal from './ProfileModal';
-import NotificationBadge from "react-notification-badge";
-import { Effect } from "react-notification-badge";
+// import NotificationBadge from "react-notification-badge";
+// import { Effect } from "react-notification-badge";
 import axios from 'axios';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../UsrAvatar/UserListItem';
 import { getSender } from '../../config/ChatLogic';
 import { backend } from '../../backend';
 const SideDrwaer = () => {
+
   const navigate = useNavigate();
   const [search , setSearch] = useState("");
   const [searchResult , setSearchResult] = useState([]);
@@ -107,10 +108,10 @@ const SideDrwaer = () => {
     <div>
       <Menu>
         <MenuButton p={1}>
-        <NotificationBadge
+        {/* <NotificationBadge
                 count={notification.length}
                 effect={Effect.SCALE}
-              />
+              /> */}
           <BellIcon fontSize={"2xl"} m={1}/>
         </MenuButton>
 

@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import axios  from "axios";
+import React from 'react'
 import { ChatState } from '../Context/ChatProvider';
 import { Box } from '@chakra-ui/react';
 import SideDrwaer from '../components/miscellaneous/SideDrwaer';
