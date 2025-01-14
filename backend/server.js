@@ -37,10 +37,12 @@ const PORT = process.env.PORT || 4000;
 const server=app.listen(PORT , console.log(`Server is running on ${PORT}`.yellow.bold))
 
 const io = require('socket.io')(server , {
-    pingTimeOut:60000,
+    // pingTimeOut:60000,
     cors: {
         origin: '*'
     },
+    transports: ["websocket", "polling"],
+    
 });
 
 // const io = new Server(server)
